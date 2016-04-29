@@ -1,20 +1,23 @@
 import requests
 
-from UDError import UDError
-from InvalidRecordError import InvalidRecordError
-from InvalidStatusError import InvalidStatusError
+from udplugin.errors.InvalidRecordError import InvalidRecordError
+from udplugin.errors.InvalidStatusError import InvalidStatusError
+from udplugin.errors.UDError import UDError
 
 
-class UDRequestHandler(object):
+class UDRequestHandler(requests):
 
 
-    def __init__(self, requests):
-        self.requests = requests
+    def __init__(self):
         self.base_url = 'http://api.urbandictionary.com/v0/define?term={}'
 
 
     def __repr__(self):
-        return 'UDRequestHandler(%r)' % self.requests
+        return 'UDRequestHandler()'
+
+
+    def __call__(self, term):
+        self.search(term)
 
 
     def search(self, term):
@@ -43,6 +46,7 @@ class UDRequestHandler(object):
         json_data = response.json()
         all_definitions = json_data['list']
         status_code = response.status_code
+        word, definition, example = None
 
         if json_data.get('result_type', 'no_results') != 'no_results':
             first_definition = all_definitions[0]
@@ -55,7 +59,7 @@ class UDRequestHandler(object):
             word,
             definition,
             example
-        )
+            )
 
 
     @staticmethod
@@ -77,5 +81,3 @@ class UDRequestHandler(object):
 
         if not word:
             raise InvalidSearchError()
-
-
