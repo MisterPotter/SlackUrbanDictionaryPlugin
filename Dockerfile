@@ -7,4 +7,4 @@ ADD . /home/dev/SlackUrbanDictionaryPlugin
 
 WORKDIR /home/dev/SlackUrbanDictionaryPlugin
 
-#RUN python3 setup.py install
+RUN python3 setup.py install
