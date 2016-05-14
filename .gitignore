@@ -2,5 +2,3 @@
 *.swo
 dist/
 build/
-__pycache__
-src/udplugin.egg-info/*
