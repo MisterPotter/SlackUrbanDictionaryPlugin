@@ -5,14 +5,14 @@ from udplugin.errors.InvalidRecordError import InvalidRecordError
 from udplugin.errors.InvalidSearchError import InvalidSearchError
 from udplugin.errors.InvalidStatusError import InvalidStatusError
 from udplugin.errors.UDError import UDError
-from udplugin.UDRequestHandler import UDRequestHandler
+from udplugin.UDRequest import UDRequest
 
 
 def main():
     args = set_up_arguments()
     term = args.term
-    request_handler = UDRequestHandler(requests)
-    status_code, word, definition, example = request_handler.search(term)
+    request_handler = UDRequest()
+    status_code, word, definition, example = request_handler(term)
     print_records((word, definition, example))
 
 
@@ -31,6 +31,7 @@ def print_records(record):
     print('Term: {}'.format(word))
     print('Definition: {}'.format(definition))
     print('Example: {}'.format(example))
+
 
 if __name__ == '__main__':
     main()
