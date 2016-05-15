@@ -7,5 +7,5 @@ ADD . /home/dev/SlackUrbanDictionaryPlugin
 
 WORKDIR /home/dev/SlackUrbanDictionaryPlugin
 
-# use pytest vs install to save time whiile constantly running unit tests
-RUN python3 setup.py pytest
+# use pytest and install to save time whiile constantly running unit tests
+RUN python3 setup.py install && python3 setup.py pytest
