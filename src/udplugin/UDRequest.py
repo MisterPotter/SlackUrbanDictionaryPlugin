@@ -1,24 +1,21 @@
 import requests
 
 from udplugin.errors.InvalidRecordError import InvalidRecordError
+from udplugin.errors.InvalidSearchError import InvalidSearchError
 from udplugin.errors.InvalidStatusError import InvalidStatusError
 from udplugin.errors.UDError import UDError
 
 
-class UDRequest():
-
+class UDRequest:
 
     def __init__(self):
-        self.base_url = 'http://api.urbandictionary.com/v0/define?term={}'
-
+        self._base_url = 'http://api.urbandictionary.com/v0/define?term={}'
 
     def __repr__(self):
         return 'UDRequestHandler()'
 
-
     def __call__(self, term):
         return self.search(term)
-
 
     def search(self, term):
         """Uses the requests module to obtain a response and then uses the
@@ -30,16 +27,15 @@ class UDRequest():
         :rtype: dict
         :return: a dict containing a single response from Urban Dictionary
         """
-        response = requests.get(self.base_url.format(term))
+        response = requests.get(self._base_url.format(term))
         try:
             record = self.response_to_record(response)
             self.verify_record(record)
 
             return record
         except UDError as e:
-            #TODO: Doc propagate error up?
+            # TODO: Doc propagate error up?
             print(e)
-
 
     @staticmethod
     def response_to_record(response):
@@ -62,7 +58,6 @@ class UDRequest():
             example
         )
 
-
     @staticmethod
     def verify_record(record):
         """Verifies a UDRecord and throws an error if there are any
@@ -74,7 +69,7 @@ class UDRequest():
         """
         try:
             status_code, word, definition, example = record
-        except ValueError as e:
+        except ValueError:
             raise InvalidRecordError()
 
         if status_code != 200:

@@ -45,8 +45,21 @@ def test___call__(search, request):
 # search #
 ##########
 
-def test_search(request):
-    pass
+@_patch.object(UDRequest, 'verify_record')
+@_patch.object(
+    UDRequest, 'response_to_record',
+    return_value=_sentinel.ud_record
+)
+@_patch('udplugin.UDRequest.requests.get', return_value=_sentinel.ud_response)
+def test_search(get, response_to_record, verify_record, request):
+    """Test the search functionality."""
+    assert request.search('nub') == _sentinel.ud_record
+
+    get.assert_called_once_with(
+        'http://api.urbandictionary.com/v0/define?term=nub'
+    )
+    response_to_record.assert_called_once_with(_sentinel.ud_response)
+    verify_record.assert_called_once_with(_sentinel.ud_record)
 
 
 def test_search_raises_UDError():
