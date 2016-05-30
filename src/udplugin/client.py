@@ -1,19 +1,13 @@
 import argparse
 import requests
 
-from udplugin.errors.InvalidRecordError import InvalidRecordError
-from udplugin.errors.InvalidSearchError import InvalidSearchError
-from udplugin.errors.InvalidStatusError import InvalidStatusError
-from udplugin.errors.UDError import UDError
-from udplugin.UDRequest import UDRequest
-
 
 def main():
     args = set_up_arguments()
     term = args.term
-    request_handler = UDRequest()
-    status_code, word, definition, example = request_handler(term)
-    print_records((word, definition, example))
+    request = 'http://localhost:5127?term={}'.format(term)
+    json_result = requests.get(request).json()
+    print_records(json_result)
 
 
 def set_up_arguments():
@@ -27,10 +21,9 @@ def set_up_arguments():
 
 
 def print_records(record):
-    word, definition, example = record
-    print('Term: {}'.format(word))
-    print('Definition: {}'.format(definition))
-    print('Example: {}'.format(example))
+    print('Term: {}'.format(record['word']))
+    print('Definition: {}'.format(record['definition']))
+    print('Example: {}'.format(record['example']))
 
 
 if __name__ == '__main__':

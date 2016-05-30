@@ -12,7 +12,7 @@ setup(
         'An application to be run on a Heroku server, or other server, '
         'which can then be used as a Slack hook.'
     ),
-    install_requires=['requests'],
+    install_requires=['requests', 'tornado'],
     setup_requires=['pytest-runner'],
     tests_require=[
         'mock',

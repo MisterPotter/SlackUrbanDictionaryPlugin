@@ -30,7 +30,7 @@ class UDRequest:
         response = requests.get(self._base_url.format(term))
         try:
             record = self.response_to_record(response)
-            self.verify_record(record)
+            self.verify_record(**record)
 
             return record
         except UDError as e:
@@ -51,27 +51,18 @@ class UDRequest:
             definition = first_definition.get('definition', None)
             example = first_definition.get('example', None)
 
-        return (
-            status_code,
-            word,
-            definition,
-            example
-        )
+        return {
+            'status_code': status_code,
+            'word': word,
+            'definition': definition,
+            'example': example
+        }
 
     @staticmethod
-    def verify_record(record):
+    def verify_record(status_code, word, definition, example):
         """Verifies a UDRecord and throws an error if there are any
            discreptencies.
-
-        :record type: dict
-        :record: a dict with the attributes, status_code, word, definitionm
-            and example
         """
-        try:
-            status_code, word, definition, example = record
-        except ValueError:
-            raise InvalidRecordError()
-
         if status_code != 200:
             raise InvalidStatusError(status_code)
 

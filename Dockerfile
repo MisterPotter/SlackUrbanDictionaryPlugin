@@ -9,3 +9,5 @@ WORKDIR /home/dev/SlackUrbanDictionaryPlugin
 
 # use pytest and install to save time whiile constantly running unit tests
 RUN python3 setup.py install && python3 setup.py pytest
+
+ENTRYPOINT ["python3", "src/udplugin/server.py"]
